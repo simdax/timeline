@@ -26,7 +26,7 @@ fps:1/25,
 //routine
 paused:false, playing:false,
 pattern:Pbind(\octave, 5, \degree,Pseries(0,1), \dur, 0.5),
-setPattern:{arg s, niou ;  
+s:{arg s, niou ;  
 	s.pattern=niou;
 	s.setEsp
 },
