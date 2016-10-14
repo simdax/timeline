@@ -5,12 +5,15 @@ TimeLine  {
 	<pattern,<esp,<routine,
 	<win;
 
-	// UI
 	*new{ arg p,b;
 		^super.new.gui(p,b)
 	}
-	
-	gui{ arg parent=Window("timeline", 200@40).front, bounds;
+
+	// UI
+	*defSize{^200@40}
+	gui{ arg parent, bounds;
+
+		parent!?{parent=Window("timeline", bounds?this.defSize).front};
 
 		// var init;
 		this.init;
@@ -46,13 +49,15 @@ TimeLine  {
 		};
 		
 	}
-
+	// interface
+	play{
+		win.keyDownAction.value
+	}
+	
+	//pr
 	init{
 
-		"init".postln;
-
 		//routine
-
 
 		time=4; offset=0; // en time (slider.val *time)
 		fps=(1/25);

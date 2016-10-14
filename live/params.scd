@@ -1,5 +1,5 @@
 (
-(
+~caca=(
 // time manip
 recommence:{ arg s;
 	s.offset=0;
@@ -18,7 +18,6 @@ newTime:{arg s, new, post=false;
 		//action
 		s.offset=s.win.value=(s.win.value*pourcentage);
 	};
-	s.changed(\time);
 },
 // var
 time:4, offset:0, // en time (slider.val *time)
@@ -26,21 +25,21 @@ fps:1/25,
 //routine
 paused:false, playing:false,
 pattern:Pbind(\octave, 5, \degree,Pseries(0,1), \dur, 0.5),
-s:{arg s, niou ;  
+setPattern:{arg s, niou ;  
 	s.pattern=niou;
 	s.setEsp
 },
-setEsp:{arg s; s.esp.source=Plazy{arg s;PFF(s.offset,s.pattern)}},
+setEsp:{arg s; s.esp.source=PFF(s.offset,s.pattern)},
 esp:EventPatternProxy().quant_(0),
-routine:TaskProxy({ arg s;
-	var b=0;
+	routine:TaskProxy({ arg s;
+		var b=0;
 	while{b<1}{
 		var time={(s.time/s.fps).reciprocal}.value;
-		{
+		defer{
 			b=s.win.value;
 			s.offset=b+time;
 			s.win.value_(b+time);
-		}.defer;
+		};
 		s.fps.wait;
 	};
 	s.recommence
@@ -48,7 +47,8 @@ routine:TaskProxy({ arg s;
 routines:{arg s; [s.routine, s.esp]},
 // UI
 guigui:{ arg s, parent=Window("timeline", 200@40).front;
-	s.routine.envir_(s); s.esp.envir_(s);
+	s.setEsp;
+	s.routine.envir_(s); //s.esp.envir_(s);
 	s.win=Slider(parent, 200@30)
 	.onClose_{s.routine.clear; s.esp.clear; s.routines=nil}
 	// stop always
@@ -81,3 +81,8 @@ guigui:{ arg s, parent=Window("timeline", 200@40).front;
 }
 )
 )
+
+
+
+
+
