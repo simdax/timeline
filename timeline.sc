@@ -10,12 +10,9 @@ TimeLine  {
 	}
 
 	// UI
-	defSize{^200@40}
 	gui{ arg parent, bounds;
-		parent.postln; bounds.postln;
 		parent??
-		{parent=Window("timeline", bounds??{bounds=this.defSize}).front};
-		parent.postln; bounds.postln;
+		{parent=Window("timeline", bounds).front};
 		// var init;
 		this.init;
 
@@ -116,24 +113,24 @@ TimeLine  {
 
 PlayLine{
 
+	*size{^200@50}
 	*new{
-		arg w=Window("io", 200@60).front, b;
+		arg win=Window("io").front, b=this.size;
 		var  z, f, tp;
 		
-		var a;
+		var a,w;
+		w=FlowView(win,b);		
+		a=TimeLine(w, (b.x-4)@(b.y/2));
 
-		var propH=[0.7,0.3]*b.height;
-		
-		a=TimeLine(w,b.height_(propH[0]));
 		w.onClose_{tp.stop.clear};
 		
 		// rajout de quelques trucs
-		z=NumberBox(a.win.parent, Rect(0, 40,0,0).extent())
+		z=NumberBox(w)
 		.action_{arg s;var c=s.value;
 			a.time=(1.max(c)); 
 		}
 		.scroll_step_(0.5);
-		f=StaticText(a.win.parent, Rect(100, 40, 100, 20 ));
+		f=StaticText(w,"ufisqf".bounds);
 		tp=TaskProxy({
 			while{a.routines.notNil}{
 				defer{
