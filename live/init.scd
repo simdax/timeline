@@ -26,6 +26,6 @@
 
 	// finalement on renvoie l'objet
 	a
-}
+}.value
 
 )

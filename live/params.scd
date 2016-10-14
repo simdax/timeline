@@ -1,5 +1,5 @@
 (
-~caca=(
+(
 // time manip
 recommence:{ arg s;
 	s.offset=0;

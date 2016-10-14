@@ -19,7 +19,7 @@ TimeLine  {
 		// var init;
 		this.init;
 
-		win=Slider(parent, 200@30)
+		win=Slider(parent, bounds)
 		.onClose_{routine.stop.clear; esp.stop.clear}
 		// stop always
 		.keyDownAction_{
@@ -120,16 +120,17 @@ PlayLine{
 		arg w=Window("io", 200@60).front, b;
 		var  z, f, tp;
 		
-		var a=TimeLine(w);
+		var a;
 
-		//
-		w.onClose_
-			{tp.stop.clear};
+		var propH=[0.7,0.3]*b.height;
+		
+		a=TimeLine(w,b.height_(propH[0]));
+		w.onClose_{tp.stop.clear};
 		
 		// rajout de quelques trucs
-		z=NumberBox(a.win.parent, Rect(0, 40, 100, 20 ))
+		z=NumberBox(a.win.parent, Rect(0, 40,0,0).extent())
 		.action_{arg s;var c=s.value;
-			a.newTime(1.max(c)); 
+			a.time=(1.max(c)); 
 		}
 		.scroll_step_(0.5);
 		f=StaticText(a.win.parent, Rect(100, 40, 100, 20 ));
