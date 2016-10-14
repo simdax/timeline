@@ -10,11 +10,12 @@ TimeLine  {
 	}
 
 	// UI
-	*defSize{^200@40}
+	defSize{^200@40}
 	gui{ arg parent, bounds;
-
-		parent!?{parent=Window("timeline", bounds?this.defSize).front};
-
+		parent.postln; bounds.postln;
+		parent??
+		{parent=Window("timeline", bounds??{bounds=this.defSize}).front};
+		parent.postln; bounds.postln;
 		// var init;
 		this.init;
 
