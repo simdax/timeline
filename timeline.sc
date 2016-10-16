@@ -39,7 +39,7 @@ TimeLine  {
 			arg self;
 			if(time==inf){} // do nothing
 			{
-				offset=(self.value.postln*time);
+				offset=(self.value*time);
 				if(playing.postln){esp.stop.play}
 				{if(paused.postln){esp.stop.play.pause}};
 				//	keyDownAction.value
@@ -49,7 +49,7 @@ TimeLine  {
 	}
 	// interface
 	play{
-		win.keyDownAction.value
+		win.keyDownAction.value(win, $ )
 	}
 	
 	//pr
@@ -110,8 +110,9 @@ TimeLine  {
 	routines{ ^[routine, esp]}
 	
 }
+// just a timeline with infos
 
-PlayLine{
+PlayLine {
 
 	*size{^200@50}
 	*new{
@@ -120,7 +121,7 @@ PlayLine{
 		
 		var a,w;
 		w=FlowView(win,b);		
-		a=TimeLine(w, (b.x-4)@(b.y/2));
+		a=TimeLine.new(w, (b.x-4)@(b.y/2));
 
 		w.onClose_{tp.stop.clear};
 		
@@ -140,6 +141,9 @@ PlayLine{
 				};
 				0.2.wait}
 		}).play;
-		^w;
+		Button(w)
+		.action_{a.play}
+		//.onClose_{Pdef(\a).stop};
+		^(win:w,timeline:a);
 	}
 }
