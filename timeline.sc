@@ -17,6 +17,7 @@ TimeLine  {
 		this.init;
 
 		win=Slider(parent, bounds)
+		.orientation_(\horizontal)
 		.onClose_{routine.stop.clear; esp.stop.clear}
 		// stop always
 		.keyDownAction_{
@@ -39,16 +40,20 @@ TimeLine  {
 		
 	}
 	// interface
-	play{
+	play{ arg quant;
 		if(playing){
-			"pause".postln;
+			//"pause".postln;
 			this.routines.do(_.pause);
 			playing=false; paused=true
 		}
 		{
 			if( paused)
-			{"resume".postln; this.routines.do(_.resume); playing=true; }
-			{"play".postln;this.routines.do(_.play); playing=true};
+			{//"resume".postln;
+				this.routines.do(_.resume(quant:quant));
+				playing=true; }
+			{//"play".postln;
+				this.routines.do(_.play(quant:quant));
+				playing=true};
 		}
 
 	}
@@ -84,10 +89,10 @@ TimeLine  {
 	// time manip
 	recommence{
 		defer
-		{		offset=0;
+		{
+			offset=0;
 			esp.stop.play;
 			routine.stop.play;
-			"beuh ?".postln;
 			win.value_(0);
 		}
 	}
@@ -120,36 +125,41 @@ TimeLine  {
 // just a timeline with infos
 
 PlayLine {
-
-	*size{^200@50}
+	
+	*size{^310@80}
 	*new{
 		arg win=Window("io").front, b=this.size;
-		var  z, f, tp;
+		var timeBox,f, tp;
 		
-		var a,w;
-		w=FlowView(win,b);		
-		a=TimeLine.new(w, (b.x-4)@(b.y/2));
-
+		var a,w, quant=0, vue1,vue2;
+		w=FlowView(win,b);
 		w.onClose_{tp.stop.clear};
+
+		
+		a=TimeLine.new(w, (b.x-4)@(b.y/2));
+		w.decorator.nextLine;
+		vue2=View(w, b.x@b.y/2).layout_(HLayout());
+
 		
 		// rajout de quelques trucs
-		z=NumberBox(w)
+		timeBox=NumberBox(vue2)
 		.action_{arg s;var c=s.value;
 			a.time=(1.max(c)); 
 		}
 		.scroll_step_(0.5);
-		f=StaticText(w,"ufisqf".bounds);
+		f=StaticText(vue2,"2:22n".bounds);
 		tp=TaskProxy({
 			while{a.routines.notNil}{
 				defer{
 					var tt=a.time;
 					var t=a.win.value*a.time;
-					f.string_(t); z.value_(tt)
+					f.string_(t); timeBox.value_(tt)
 				};
 				0.2.wait}
 		}).play;
-		Button(w).action_{a.play}
+		NumberBox(vue2).value_(quant).action_{arg self; quant=self.value};
+		Button(vue2).action_{a.play(quant)}
 		//.onClose_{Pdef(\a).stop};
-		^(win:w,timeline:a);
+		^(win:w,timeline:a,timeBox:timeBox);
 	}
 }
