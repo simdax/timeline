@@ -75,34 +75,37 @@ TimeLine  {
 				};
 				fps.wait;
 			};
-			this.recommence
+			this.recommence;
 		}).quant_(0);
 
 		this.setEsp;
 		
 	}
 	// time manip
-	recommence{ 
-		offset=0;
-		esp.stop.play;
-		defer{win.value_(0)};
-		routine.stop.play;
+	recommence{
+		defer
+		{		offset=0;
+			esp.stop.play;
+			routine.stop.play;
+			"beuh ?".postln;
+			win.value_(0);
+		}
 	}
 	time_{arg new, post=false;
+		var pourcentage;
+		var niou;
+		var now;
 		defer{
-			var pourcentage;
-			var niou;
-			var now;
-			now=time*win.value;
-			time=new; //routine.envir_(s);
+			now=time.copy*win.value;
 			if(new<now){this.recommence}
 			{
-				pourcentage=time/new; pourcentage;
+				pourcentage=time/new; 
 				//action
 				offset=win.value=(win.value*pourcentage);
 			};
 			this.changed(\time);
-		}
+		};
+		time=new
 	}
 	// var
 
@@ -145,8 +148,7 @@ PlayLine {
 				};
 				0.2.wait}
 		}).play;
-		Button(w)
-		.action_{a.play}
+		Button(w).action_{a.play}
 		//.onClose_{Pdef(\a).stop};
 		^(win:w,timeline:a);
 	}
