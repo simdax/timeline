@@ -21,17 +21,8 @@ TimeLine  {
 		// stop always
 		.keyDownAction_{
 			arg self, c;
-			switch(c, $ , { 
-				if(playing){
-					"pause".postln;
-					this.routines.do(_.pause);
-					playing=false; paused=true
-				}
-				{
-					if( paused)
-					{"resume".postln; this.routines.do(_.resume); playing=true; }
-					{"play".postln;this.routines.do(_.play); playing=true};
-				}
+			switch(c, $ , {
+				this.play;
 			})
 		}
 		//retriggers
@@ -49,7 +40,17 @@ TimeLine  {
 	}
 	// interface
 	play{
-		win.keyDownAction.value(win, $ )
+		if(playing){
+			"pause".postln;
+			this.routines.do(_.pause);
+			playing=false; paused=true
+		}
+		{
+			if( paused)
+			{"resume".postln; this.routines.do(_.resume); playing=true; }
+			{"play".postln;this.routines.do(_.play); playing=true};
+		}
+
 	}
 	
 	//pr
@@ -88,17 +89,20 @@ TimeLine  {
 		routine.stop.play;
 	}
 	time_{arg new, post=false;
-		var pourcentage;
-		var niou;
-		var now=time*win.value;
-		time=new; //routine.envir_(s);
-		if(new<now){this.recommence}
-		{
-			pourcentage=time/new; pourcentage;
-			//action
-			offset=win.value=(win.value*pourcentage);
-		};
-		this.changed(\time);
+		defer{
+			var pourcentage;
+			var niou;
+			var now;
+			now=time*win.value;
+			time=new; //routine.envir_(s);
+			if(new<now){this.recommence}
+			{
+				pourcentage=time/new; pourcentage;
+				//action
+				offset=win.value=(win.value*pourcentage);
+			};
+			this.changed(\time);
+		}
 	}
 	// var
 
