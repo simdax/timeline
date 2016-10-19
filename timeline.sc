@@ -157,7 +157,10 @@ PlayLine {
 				};
 				0.2.wait}
 		}).play;
-		NumberBox(vue2).value_(quant).action_{arg self; quant=self.value};
+		NumberBox(vue2)
+		.scroll_step_(0.5)
+		.value_(quant)
+		.action_{arg self; quant=self.value};
 		Button(vue2).action_{a.play(quant)}
 		//.onClose_{Pdef(\a).stop};
 		^(win:w,timeline:a,timeBox:timeBox);
